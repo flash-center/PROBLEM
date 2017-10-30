@@ -49,11 +49,13 @@ The donut is an ellipsoidal blob of magnetic field,
 
 ![Donut](examples/donut/true/true_magBpath.png)
 
-To run this example problems,
+To run this example problem,
 ```bash
 cd ~/PROBLEM/examples/donut/
 python reconstruct.py
 ```
+
+Checkpoint files for every 1000 steps will be saved in the `solve/` directory.
 
 To plot the magnetic field at each time step, we need the
 [`matplotlib`](https://matplotlib.org/) package. We install it by
@@ -74,11 +76,13 @@ boundaries of the PROBLEM solver,
 
 ![Strip](examples/strip/true/true_magBpath.png)
 
-To run this example problems,
+To run this example problem,
 ```bash
 cd ~/PROBLEM/examples/strip/
 python reconstruct.py
 ```
+
+Checkpoint files for every 1000 steps will be saved in the `solve/` directory.
 
 To plot the magnetic field at each time step, we need the
 [`matplotlib`](https://matplotlib.org/) package. We install it by
