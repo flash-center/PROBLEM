@@ -16,7 +16,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    #url='https://github.com/pypa/sampleproject',
+    url='https://github.com/flash-center/PROBLEM',
 
     # Author details
     author='Jordan Laune',
@@ -31,7 +31,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         'Intended Audience :: Science/Research',
@@ -86,9 +86,9 @@ setup(
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
-    entry_points={
-        'console_scripts': [
-            'prad-reconstruct=prad.scripts.prad_reconstruct:reconstruct_Bpath',
-        ],
-    },
+    #entry_points={
+    #    'console_scripts': [
+    #        'prad-reconstruct=prad.scripts.prad_reconstruct:reconstruct_Bpath',
+    #    ],
+    #},
 )
