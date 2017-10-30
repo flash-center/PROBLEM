@@ -9,8 +9,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='prad',
-    version='1.0a1',
+    name='problem',
+    version='1.0b1',
 
     description='Package for proton radiography field reconstruction.',
     long_description=long_description,

@@ -1,9 +1,12 @@
-# prad
+# PROBLEM
 
-A proton radiography reconstruction tool in Python. 
+A proton radiography reconstruction tool in Python.
 
 This provides a library of functions to reconstruct the path integrated magnetic
 field present in a plasma based on a proton radiography flux image.
+
+## Disclaimer
+
 
 ## Installation
 
@@ -13,8 +16,8 @@ Requirements:
 * [`scipy`](https://www.scipy.org/)
 
 ```bash
-git clone https://github.com/jtlaune/prad.git
-cd prad
+git clone https://github.com/flash-center/PROBLEM.git
+cd problem
 python setup.py install
 ```
 
@@ -33,18 +36,18 @@ are needed:
 The standard process of reconstructing the path-integrated magnetic fields from
 the flux image is as follows:
 
-* set up the problem parameters with `prad.screen.setup()`
-* solve for the screen mapping potential with `prad.screen.solve()`
+* set up the problem parameters with `problem.screen.setup()`
+* solve for the screen mapping potential with `problem.screen.solve()`
 * reconstruct the perpendicular deflection fields from the screen mapping
-    potential with `prad.deflect.reconstruct()`
+    potential with `problem.deflect.reconstruct()`
 * reconstruct the path-integrated magnetic fields in the x & y directions using
-    `prad.deflect.magpath()`
+    `problem.deflect.magpath()`
 
 ### Example Problem
 
 ```python
-import prad.screen
-import prad.deflect
+import problem.screen
+import problem.deflect
 
 ri = 1 # Distance from proton source to plasma.
 li = .1 # Distance across plasma.
@@ -58,7 +61,7 @@ flux = np.loadtxt('fluximage.out') # Load the flux image from a file.
 mask = np.loadtxt('mask.out') 
 
 # Set up the initial conditions for the reconstruction problem.
-plasma_x, plasma_y, flux0, flux = prad.screen.setup(ri, li, rs, dxS, image, mask)
+plasma_x, plasma_y, flux0, flux = problem.screen.setup(ri, li, rs, dxS, image, mask)
 
 dt = 1e-8 # Timestep for solver.
 tol = 1e-3 # Tolerance level for steady state solution.
@@ -66,17 +69,17 @@ tol = 1e-3 # Tolerance level for steady state solution.
 # Initiate the solver.
 # chk=True means the solver will save checkpoint files at the desired interval
 # in the directory specified by save_dir.
-phin, phix, phiy = prad.screen.solve(plasma_x, plasma_y, flux0, flux,
+phin, phix, phiy = problem.screen.solve(plasma_x, plasma_y, flux0, flux,
                                      dt, tol, chk=True, interval=1000,
                                      save_dir='solve/')
 
 # Reconstruct the perpendicular deflection fields.
-wBx, wBy = prad.deflect.reconstruct(ri, li, rs, v, 
+wBx, wBy = problem.deflect.reconstruct(ri, li, rs, v, 
                                     plasma_x, plasma_y, 
                                     phix, phiy)
 
 # Reconstruct the path-integrated magnetic fields in x & y directions.
-Bxpath, Bypath = prad.deflect.magpath(wBx, wBy)
+Bxpath, Bypath = problem.deflect.magpath(wBx, wBy)
 ```
 
 ## Future Work
@@ -86,4 +89,4 @@ Future goals include
 * perform more validation and test cases
 * create user-friendly command line tools
 * create compatibility with reader functions from 
-    [`pradreader`](https://github.com/jtlaune/pradreader)
+    [`pradreader`](https://github.com/jtlaune/problemreader)
