@@ -55,7 +55,12 @@ cd ~/PROBLEM/examples/donut/
 python reconstruct.py
 ```
 
-To plot the magnetic field at each time step,
+To plot the magnetic field at each time step, we need the
+[`matplotlib`](https://matplotlib.org/) package. We install it by
+```bash
+pip install matplotlib
+```
+Now, we run our script to plot the magnetic field strength at each step,
 ```bash
 python plot_images.py
 ```
@@ -75,7 +80,12 @@ cd ~/PROBLEM/examples/strip/
 python reconstruct.py
 ```
 
-To plot the magnetic field at each time step,
+To plot the magnetic field at each time step, we need the
+[`matplotlib`](https://matplotlib.org/) package. We install it by
+```bash
+pip install matplotlib
+```
+Now, we run our script to plot the magnetic field strength at each step,
 ```bash
 python plot_images.py
 ```
