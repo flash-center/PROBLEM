@@ -1,4 +1,4 @@
-# PROBLEM
+# PROBLEM Solver (PROton-imaged B-field nonLinear Extraction Module)
 
 A proton radiography reconstruction tool in Python.
 
@@ -7,6 +7,10 @@ field present in a plasma based on a proton radiography flux image.
 
 ## Disclaimer
 
+This package is in its beta stages of development. The only two tested example
+problems are those included in the `examples/` directory. All other
+reconstruction problems are made at the user's risk until further development
+is made on `problem`.
 
 ## Installation
 
@@ -34,60 +38,47 @@ are needed:
 * the flux image
 * the velocity of the protons
 
-The standard process of reconstructing the path-integrated magnetic fields from
-the flux image is as follows:
+In the following examples, the flux image and all other relevant data are
+provided.
 
-* set up the problem parameters with `problem.screen.setup()`
-* solve for the screen mapping potential with `problem.screen.solve()`
-* reconstruct the perpendicular deflection fields from the screen mapping
-    potential with `problem.deflect.reconstruct()`
-* reconstruct the path-integrated magnetic fields in the x & y directions using
-    `problem.deflect.magpath()`
+## Example Problems
 
-### Example Problem
+### Donut
 
-```python
-import problem.screen
-import problem.deflect
+The donut is an ellipsoidal blob of magnetic field,
 
-ri = 1 # Distance from proton source to plasma.
-li = .1 # Distance across plasma.
-rs = 20 # Distance from plasma to screen.
-dxS =.02 # Pixel size of detector screen.
-v = 5.24e9 # Proton velocity from source.
-flux = np.loadtxt('fluximage.out') # Load the flux image from a file.
-# Load the mask from a file.
-# The mask is a bitwise mask that will be used to select a subset of the flux 
-# image for reconstruction purposes. 1's are masked points, 0's are unmasked.
-mask = np.loadtxt('mask.out') 
+![Donut](examples/donut/true/true_magBpath.png)
 
-# Set up the initial conditions for the reconstruction problem.
-plasma_x, plasma_y, flux0, flux = problem.screen.setup(ri, li, rs, dxS, image, mask)
-
-dt = 1e-8 # Timestep for solver.
-tol = 1e-3 # Tolerance level for steady state solution.
-
-# Initiate the solver.
-# chk=True means the solver will save checkpoint files at the desired interval
-# in the directory specified by save_dir.
-phin, phix, phiy = problem.screen.solve(plasma_x, plasma_y, flux0, flux,
-                                     dt, tol, chk=True, interval=1000,
-                                     save_dir='solve/')
-
-# Reconstruct the perpendicular deflection fields.
-wBx, wBy = problem.deflect.reconstruct(ri, li, rs, v, 
-                                    plasma_x, plasma_y, 
-                                    phix, phiy)
-
-# Reconstruct the path-integrated magnetic fields in x & y directions.
-Bxpath, Bypath = problem.deflect.magpath(wBx, wBy)
+To run this example problems,
+```bash
+cd ~/PROBLEM/examples/donut/
+python reconstruct.py
 ```
 
-## Future Work
+To plot the magnetic field at each time step,
+```bash
+python plot_images.py
+```
+This script will save the image of the magnetic field at each time step to the
+`images/` directory for viewing.
 
-Future goals include
+### Strip
 
-* perform more validation and test cases
-* create user-friendly command line tools
-* create compatibility with reader functions from 
-    [`pradreader`](https://github.com/jtlaune/problemreader)
+The strip is an vertical strip of magnetic field, designed to test the
+boundaries of the PROBLEM solver,
+
+![Strip](examples/strip/true/true_magBpath.png)
+
+To run this example problems,
+```bash
+cd ~/PROBLEM/examples/strip/
+python reconstruct.py
+```
+
+To plot the magnetic field at each time step,
+```bash
+python plot_images.py
+```
+This script will save the image of the magnetic field at each time step to the
+`images/` directory for viewing.
+

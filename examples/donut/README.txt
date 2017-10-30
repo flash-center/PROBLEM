@@ -8,7 +8,7 @@ Notes for test example 1 (B field ellipsoid)
 
 4. The distance rs from magnetic field configuration to screen is rs = 20 cm.
 
-5. The magnification used is M = (rs+ri+0.5*li)/(ri+0.5*li) (we can discuss why I think this is best choice in a Skype call). 
+5. The magnification used is M = (rs+ri+0.5*li)/(ri+0.5*li).
 
 6. The z-axis points into the screen - which means that Bxpath = - (mp*c/qe)*wBx; Bypath = (mp*c/qe)*wBx (mp = 1.67e-24 g; qe = 4.803e-10 statcoulomb; c = 3.0e10 cm/s). 
 
