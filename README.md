@@ -16,6 +16,7 @@ Requirements:
 * [`scipy`](https://www.scipy.org/)
 
 ```bash
+pip install numpy scipy
 git clone https://github.com/flash-center/PROBLEM.git
 cd problem
 python setup.py install
