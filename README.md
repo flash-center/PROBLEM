@@ -32,7 +32,7 @@ the proton deflections.
 
 In Bott et al. (2017), it is shown that reconstructing the magnetic field from a
 proton image is equivalent to solving the following logarithmic parbolic
-Monge-Amp&#232;re equation for the steady state solution of &#934;
+Monge-Amp&#232;re equation for the steady state solution of &#934;:
 
 <p align="center">
 <img src="images/mongeampere.png" width="500">
@@ -55,7 +55,7 @@ Requirements:
 ```bash
 pip install numpy scipy
 git clone https://github.com/flash-center/PROBLEM.git
-cd problem
+cd PROBLEM
 python setup.py install
 ```
 
