@@ -55,7 +55,7 @@ Requirements:
 ```bash
 pip install numpy scipy
 git clone https://github.com/flash-center/PROBLEM.git
-cd PROBLEM
+cd PROBLEM/
 python setup.py install
 ```
 
