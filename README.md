@@ -2,8 +2,9 @@
 
 The PROBLEM Solver is an open source Python implementation of the proton
 radiography reconstruction algorithm of Bott et al. (2017).
-It ensures cross-platform, fast, and easy-to-use
-features to reconstruct magnetic fields from simulated and
+The project currently includes two example problems to demonstrate the
+algorithm. Soon, tools will be added to support 
+reconstruction of magnetic fields from simulated and
 experimental proton radiography data for high-energy laser experiments.
 
 ## Proton radiography
