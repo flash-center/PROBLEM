@@ -32,7 +32,7 @@ the proton deflections.
 
 In Bott et al. (2017), it is shown that reconstructing the magnetic field from a
 proton image is equivalent to solving the following logarithmic parbolic
-<img src="images/mongeampere.png" width="300">
+<img src="images/mongeampere.png" width="600">
 
 ## Disclaimer
 
