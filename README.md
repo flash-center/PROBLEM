@@ -34,7 +34,7 @@ In Bott et al. (2017), it is shown that reconstructing the magnetic field from a
 proton image is equivalent to solving the following logarithmic parbolic
 Monge-Amp&#232;re equation for the steady state solution of &#934;
 
-<img src="images/mongeampere.png" align="middle" width="500">
+<center><img src="images/mongeampere.png" width="500"></center>
 
 ## Disclaimer
 
