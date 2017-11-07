@@ -1,16 +1,46 @@
 # PROBLEM Solver (PROton-imaged B-field nonLinear Extraction Module)
 
-A proton radiography reconstruction tool in Python.
+The PROBLEM Solver is an open source Python implementation of the proton
+radiography reconstruction algorithm of Bott et al. (2017).
+It ensures cross-platform, fast, and easy-to-use
+features to reconstruct magnetic fields from simulated and
+experimental proton radiography data for high-energy laser experiments.
 
-This provides a library of functions to reconstruct the path integrated magnetic
-field present in a plasma based on a proton radiography flux image.
+## Proton radiography
+
+Proton radiography is an invaluable tool for gathering information about the 
+strength and topology of magnetic fields in high-energy laser plasma experiments 
+(Li et al. 2006). The diagnostic utilizes high-energy protons that travel 
+through a magnetized plasma and whose paths are altered by the magnetic 
+fields present in the plasma. After the interaction, the protons propagate 
+to a screen where they impart an image, thereby recording information about 
+magnetic field deflections. The image can then be analyzed after the experiment
+to understand the structure of the magnetic field inside the plasma.
+
+
+## The problem of reconstructing a magnetic field from a flux image
+
+If the magnetic field strength is small enough in a plasma, 
+the proton paths remain injective during proton radiography.
+In this case, it can be shown that the path-integrated 
+magnetic field may be reconstructed from the proton image 
+(Graziani et al. 2016; Bott et al. 2017). 
+In proton radiography, after the protons travel through the magnetic field,
+the information regarding their deflections is imparted in the flux image.
+We would like to transform the proton flux image back into information regarding
+the proton deflections. 
+
+In Bott et al. (2017), it is shown that reconstructing the magnetic field from a
+proton image is equivalent to solving the following logarithmic parbolic
+Monge-Amp&#232;re equation for the steady state solution for &#934;
+![testtext](images/mongeampere.png)
 
 ## Disclaimer
 
 This package is in its beta stages of development. The only two tested example
 problems are those included in the `examples/` directory. All other
 reconstruction problems are made at the user's risk until further development
-is made on `problem`.
+is made on PROBLEM.
 
 ## Installation
 
@@ -26,20 +56,6 @@ cd problem
 python setup.py install
 ```
 
-## Usage
-
-In order to reconstruct a magnetic field from a flux image, the following data
-are needed:
-
-* the relevant distances for the problem, i.e. the distance from the proton
-    source to the plasma, the distance across the plasma, and the distance from
-    the plasma to the detector
-* the detector pixel size
-* the flux image
-* the velocity of the protons
-
-In the following examples, the flux image and all other relevant data are
-provided.
 
 ## Example Problems
 
