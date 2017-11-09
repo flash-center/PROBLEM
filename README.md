@@ -39,12 +39,8 @@ Monge-Amp&#232;re equation for the steady state solution of &#934;:
 <img src="images/mongeampere.png" width="500">
 </p>
 
-## Disclaimer
-
-This package is in its beta stages of development. The only two tested example
-problems are those included in the `examples/` directory. All other
-reconstruction problems are made at the user's risk until further development
-is made on PROBLEM.
+PROBLEM transforms proton flux data into this Monge-Amp&#232;re problem and then
+implements a solver to reconstruct the path-integrated magnetic field.
 
 ## Installation
 
@@ -52,9 +48,23 @@ Requirements:
 
 * [`numpy`](http://www.numpy.org/)
 * [`scipy`](https://www.scipy.org/)
+* [`matplotlib`](https://matplotlib.org/)
 
+The requirements may be installed according to the directions on 
+their webpages, or with any Python
+package manager that supports them. For example, one could use `pip` to install
+them as
+ ```bash
+pip install numpy scipy matplotlib
+```
+One could also use [Anaconda Python](https://anaconda.org/anaconda/python) to
+install them as
 ```bash
-pip install numpy scipy
+conda install numpy scipy matplotlib
+```
+
+After installing the required packages, we may install PROBLEM as
+```bash
 git clone https://github.com/flash-center/PROBLEM.git
 cd PROBLEM/
 python setup.py install
@@ -77,11 +87,6 @@ python reconstruct.py
 
 Checkpoint files for every 1000 steps will be saved in the `solve/` directory.
 
-To plot the magnetic field at each time step, we need the
-[`matplotlib`](https://matplotlib.org/) package. We install it by
-```bash
-pip install matplotlib
-```
 Now, we run our script to plot the magnetic field strength at each step,
 ```bash
 python plot_images.py
@@ -104,11 +109,6 @@ python reconstruct.py
 
 Checkpoint files for every 1000 steps will be saved in the `solve/` directory.
 
-To plot the magnetic field at each time step, we need the
-[`matplotlib`](https://matplotlib.org/) package. We install it by
-```bash
-pip install matplotlib
-```
 Now, we run our script to plot the magnetic field strength at each step,
 ```bash
 python plot_images.py
