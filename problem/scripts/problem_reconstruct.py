@@ -55,11 +55,11 @@ def setup_input():
     chk_interval = args.chk
     save_dir = args.save_dir
     if args.xstep is None:
-        dx = input("Please specify the x-coordinate step size (in cm): ")
+        dx = float(input("Please specify the x-coordinate step size (in cm): "))
     else:
         dx = args.xstep
     if args.ystep is None:
-        dy = input("Please specify the y-coordinate step size (in cm): ")
+        dy = float(input("Please specify the y-coordinate step size (in cm): "))
     else:
         dy = args.ystep
     prad = pradreader.reader.loadPRR(ifile=args.input_file)
