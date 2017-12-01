@@ -30,6 +30,6 @@ Nstep = 400000
 phin, phix, phiy = problem.screen.solve(plasma_x, plasma_y,
                                         flux0, flux, solvestep, relax,
                                         Nstep=Nstep,
-                                        chk=True, interval=1000, 
+                                        chk=True, interval=1000,
                                         nan_exception=True,
                                         save_dir='solve')

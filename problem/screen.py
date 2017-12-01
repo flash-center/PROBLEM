@@ -22,7 +22,7 @@ def setup(ri, li, rs, dxS, image, mask):
         image (array): Proton flux image to analyze.
         mask (array): Bitwise mask of data to analyze in the flux image,
                       assuming 1 is masked and 0 is unmasked.
-        
+
     Returns:
         plasma_x (array): Plasma x-coordinates (cm).
         plasma_y (array): Plasma x-coordinates (cm).
@@ -32,9 +32,9 @@ def setup(ri, li, rs, dxS, image, mask):
 
     magnify = (rs+ri+.5*li)/(ri+.5*li)
     # Leave the original image unchanged.
-    flux_image = np.copy(image)     
+    flux_image = np.copy(image)
     flux_mask = np.copy(mask)
-    
+
     # Mask the flux_image and
     # fill the masked positions with the mean flux.
     #
@@ -52,8 +52,8 @@ def setup(ri, li, rs, dxS, image, mask):
     # TODO
     # @usualgaussnumber applies a Gaussian filter after this step, see
     # pradreconstructionfluxdistsetup.m
-    
-    # Prepare the flux and 
+
+    # Prepare the flux and
     # flux_0 for the primary reconstruction process.
     # flux_0 and flux_0 mask are the initial flux distributions,
     # which we choose to be uniform over the selected region while
@@ -72,27 +72,27 @@ def setup(ri, li, rs, dxS, image, mask):
     Lx = dxS*Nx
     Ly = dxS*Ny
 
-    # Create the coordinates for the flux samples for the centers of the 
+    # Create the coordinates for the flux samples for the centers of the
     # bins on the screen.
     screen_x = np.linspace((-Lx/2)+.5*dxS, (Lx/2)-.5*dxS, Nx)
     screen_y = np.linspace((-Ly/2)+.5*dxS, (Ly/2)-.5*dxS, Ny)
     screen_x, screen_y = np.meshgrid(screen_x, screen_y, indexing='ij')
-    
-    # TODO In @usualgaussnumber's code, 
-    # the flux_bndy was created when he selected a 
+
+    # TODO In @usualgaussnumber's code,
+    # the flux_bndy was created when he selected a
     # region from the Matlab environment. Here, instead, we will
     # create the coordinates from the mask.
     # I'm not quite sure if this is used beyond simply blurring the
     # edges of the flux, as in pradreconstructionfluxdistsetup.m --@jtlaune
-    
+
     # Scale the plasma coordinates according to the distances.
     plasma_x = screen_x/magnify
     plasma_y = screen_y/magnify
-   
+
     return(plasma_x, plasma_y, flux0, flux)
 
-def solve(X, Y, flux0, flux, dt, tol, 
-          chk=False, interval=1000, 
+def solve(X, Y, flux0, flux, dt, tol,
+          chk=False, interval=1000,
           nan_exception=True, start_chk=False,
           start_phin=None, start_step=None,
           save_dir=None,
@@ -100,7 +100,7 @@ def solve(X, Y, flux0, flux, dt, tol,
     """
     Main solving algorithm of the
     Monge-Ampere deflection-field potential problem using
-    a finite difference scheme. 
+    a finite difference scheme.
 
     Args:
         X (array): Plasma x-coordinates (cm).
@@ -118,7 +118,7 @@ def solve(X, Y, flux0, flux, dt, tol,
                                      checkpoint file.
         start_phin=None (str): 'phin' checkpoint file to use. Must be specified
                                if save_chk=True.
-        start_step=None (int): Starting step of the 'phin' file. Must be 
+        start_step=None (int): Starting step of the 'phin' file. Must be
                                specified if save_chk=True.
         save_dir=None (str): If chk=True, this specifies the directory to save
                              the checkpoint files to. If this is left as None,
@@ -128,12 +128,12 @@ def solve(X, Y, flux0, flux, dt, tol,
     Returns:
         phin (numpy.ndarray): Screen mapping potential in the plasma
                               coordinates.
-        phix (numpy.ndarray): x-gradient of the screen mapping potential in 
+        phix (numpy.ndarray): x-gradient of the screen mapping potential in
                               the plasma coordinates.
-        phiy (numpy.ndarray): x-gradient of the screen mapping potential in 
+        phiy (numpy.ndarray): x-gradient of the screen mapping potential in
                               the plasma coordinates.
     """
-    plasma_x = np.copy(X) 
+    plasma_x = np.copy(X)
     plasma_y = np.copy(Y)
     flux0 = np.copy(flux0)
     flux = np.copy(flux)
@@ -158,7 +158,7 @@ def solve(X, Y, flux0, flux, dt, tol,
     if save_dir is not None:
         if not os.path.isdir(save_dir):
             raise Exception('Please specify a valid save directory')
-    
+
     ############################
     # BEGINNING OF MAIN SOLVER #
     ############################
@@ -177,10 +177,10 @@ def solve(X, Y, flux0, flux, dt, tol,
     # Create plasma parameters
     dx = plasma_x[1,0] - plasma_x[0,0]
     dy = plasma_y[0,1] - plasma_y[0,0]
-    
+
     plasma_Lx = plasma_x[-1,0] - plasma_x[0,0]
     plasma_Ly = plasma_y[0,-1] - plasma_y[0,0]
-    
+
     # Create the derivative arrays phix, phiy, phixx, phiyy, phixy.
     # They will be the same size as phin and will be replaced every
     # timestep.
@@ -194,13 +194,13 @@ def solve(X, Y, flux0, flux, dt, tol,
     pointfluxerror = np.zeros((Nstep))
     Nxrand = int(np.floor(np.random.ranf()*(plasma_Nx+1)))
     Nyrand = int(np.floor(np.random.ranf()*(plasma_Ny+1)))
-    
+
     if chk:
         if save_dir==None:
             # Save the files to the current directory.
             np.savetxt(os.path.join(os.getcwd(), 'plasma_x.txt'),
                        plasma_x, delimiter=',')
-            np.savetxt(os.path.join(os.getcwd(), 'plasma_y.txt'),  
+            np.savetxt(os.path.join(os.getcwd(), 'plasma_y.txt'),
                        plasma_y, delimiter=',')
         else:
             # Save the files to the specified save directory.
@@ -208,15 +208,15 @@ def solve(X, Y, flux0, flux, dt, tol,
                        plasma_x, delimiter=',')
             np.savetxt(os.path.join(save_dir, 'plasma_y.txt'),
                        plasma_y, delimiter=',')
-                    
+
     # Create the interpolator function.
     flux_interp = sp.interpolate.RegularGridInterpolator(
-                                    (plasma_x[:,0], plasma_y[0,:]), 
+                                    (plasma_x[:,0], plasma_y[0,:]),
                                     flux,
                                     method='linear',
                                     bounds_error=False,
                                     fill_value=flux_mean)
-    
+
     ###################################
     # Begin finite difference scheme. #
     ###################################
@@ -230,25 +230,25 @@ def solve(X, Y, flux0, flux, dt, tol,
     #    - get the first and second derivatives in each of these regions
     # 4. Calculate quantities and update phin
     #
-    
+
     for timestep in range(Nstep):
         if start_chk:
             # If we are starting from a checkpoint file then we want to make
             # sure the timestep is accurate. Note that this will overwrite any
             # other files made after the checkpoint file we are using.
             timestep = start_step + timestep + 1
-        
+
         print(timestep)
-        
+
         # Test whether algorithm is stable
         if nan_exception and np.any(np.isnan(phin)):
-            raise Exception('The reconstruction algorithm is unstable.') 
+            raise Exception('The reconstruction algorithm is unstable.')
 
         # Create gradient arrays phix, phiy
         phix, phiy = np.gradient(phin, dx, dy)
-        
+
         # Begin adjusting gradient arrays for Neumann BCs.
-        
+
         # phix corners.
         #phix[0,0] = plasma_x[0,0]
         #phix[0,plasma_Ny-1] = plasma_x[0,plasma_Ny-1]
@@ -260,7 +260,7 @@ def solve(X, Y, flux0, flux, dt, tol,
         #phiy[0,plasma_Ny-1] = plasma_y[0,plasma_Ny-1]
         #phiy[plasma_Nx-1,0]  = plasma_y[plasma_Nx-1,0]
         #phiy[plasma_Nx-1,plasma_Ny-1] = plasma_y[plasma_Nx-1,plasma_Ny-1]
-        
+
         # phix edges.
         phix[0,:] = -plasma_x[0,:]
         phix[plasma_Nx-1,:] = plasma_x[plasma_Nx-1,:]
@@ -268,7 +268,7 @@ def solve(X, Y, flux0, flux, dt, tol,
         # phiy edges.
         phiy[:,0] = -plasma_y[:,0]
         phiy[:,plasma_Ny-1] = plasma_y[:,plasma_Ny-1]
-        
+
         # Lets try to just match up the coordinates. Seems to be a problem on
         # the boundary with the non neumann BC sides. --@jtlaune
         #phix[0,:] = plasma_x[0,:]
@@ -295,7 +295,7 @@ def solve(X, Y, flux0, flux, dt, tol,
 
         # Now calculate the derived quantities.
         det = phixx*phiyy - phixy**2
-        
+
         # Interpolate the flux at initial points.
         # We fill points outside of the grid with flux_mean since that is what
         # we are assuming the protons are doing outside of the interaction
@@ -306,46 +306,46 @@ def solve(X, Y, flux0, flux, dt, tol,
         # TODO @usualgaussnumber's code had absolute det? Not sure why. This is
         # not mentioned in the Sulman numerical solution paper.
         Fn = np.log(fluxn*np.absolute(det)/flux0)
-        
-        
+
+
         # Create new phi_derived array to do error checking.
         phi_derived = phin+dt*Fn
 
         # Calculate the flux error.
         pointfluxerror[timestep] = (phi_derived[Nxrand,Nyrand]
                                     - phin[Nxrand,Nyrand])
-        
+
         RMSfluxerror[timestep] = np.sqrt(np.mean((phi_derived-phin)**2))
 
         # Finally update phin for the next timestep.
         phin = phi_derived
-        
+
         # TODO figure out a better way to do the tolerance checking for steady
         # state solution.
         if np.linalg.norm(Fn) < tol:
             break
-        
+
         if chk:
             if (timestep % interval) == 0:
                 if save_dir==None:
                     # Save the files to the current directory.
-                    np.savetxt('phin' + str(timestep) + '.txt', 
+                    np.savetxt('phin' + str(timestep) + '.txt',
                                phin, delimiter=',')
-                    np.savetxt('phix' + str(timestep) + '.txt', 
+                    np.savetxt('phix' + str(timestep) + '.txt',
                                phix, delimiter=',')
-                    np.savetxt('phiy' + str(timestep) + '.txt', 
+                    np.savetxt('phiy' + str(timestep) + '.txt',
                                phiy, delimiter=',')
                 else:
-                    # Save the files to the specified save directory. 
-                    np.savetxt(save_dir+'/phin' + str(timestep) + '.txt', 
+                    # Save the files to the specified save directory.
+                    np.savetxt(save_dir+'/phin' + str(timestep) + '.txt',
                                phin, delimiter=',')
-                    np.savetxt(save_dir+'/phix' + str(timestep) + '.txt', 
+                    np.savetxt(save_dir+'/phix' + str(timestep) + '.txt',
                                phix, delimiter=',')
-                    np.savetxt(save_dir+'/phiy' + str(timestep) + '.txt', 
+                    np.savetxt(save_dir+'/phiy' + str(timestep) + '.txt',
                                phiy, delimiter=',')
-                        
+
         #################################
         # End finite difference scheme. #
         #################################
-    
+
     return(phin, phix, phiy)
