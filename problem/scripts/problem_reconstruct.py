@@ -6,8 +6,8 @@ import problem.screen
 
 def get_input():
     parser = argparse.ArgumentParser(
-                description="This script is used to check error differences"
-                            "between two files.")
+                description="This script is used to reconstruct proton
+                            "radiography data from a PRadReader data file.")
 
     parser.add_argument("input_file",
                         action="store", type=str,
