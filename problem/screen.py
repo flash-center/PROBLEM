@@ -262,11 +262,11 @@ def solve(X, Y, flux0, flux, dt, tol,
         #phiy[plasma_Nx-1,plasma_Ny-1] = plasma_y[plasma_Nx-1,plasma_Ny-1]
 
         # phix edges.
-        phix[0,:] = -plasma_x[0,:]
+        phix[0,:] = plasma_x[0,:]
         phix[plasma_Nx-1,:] = plasma_x[plasma_Nx-1,:]
 
         # phiy edges.
-        phiy[:,0] = -plasma_y[:,0]
+        phiy[:,0] = plasma_y[:,0]
         phiy[:,plasma_Ny-1] = plasma_y[:,plasma_Ny-1]
 
         # Lets try to just match up the coordinates. Seems to be a problem on
