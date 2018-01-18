@@ -6,7 +6,7 @@ import problem.screen
 
 def get_input():
     parser = argparse.ArgumentParser(
-                description="This script is used to reconstruct proton
+                description="This script is used to reconstruct proton"
                             "radiography data from a PRadReader data file.")
 
     parser.add_argument("input_file",
