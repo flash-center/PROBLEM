@@ -1,11 +1,13 @@
 # PROBLEM Solver (PROton-imaged B-field nonLinear Extraction Module)
 
 The PROBLEM Solver is an open source Python implementation of the proton
-radiography reconstruction algorithm of Bott et al. (2017).
+radiography reconstruction algorithm of Bott et al. (2017) <sup>1</sup>. 
 The project currently includes two example problems to demonstrate the
 algorithm. When completed, it will provide tools to support 
 reconstruction of magnetic fields from simulated and
 experimental proton radiography data for high-energy laser experiments.
+
+<sup>1</sup> [Bott, A. F. A. et al. Proton imaging of stochastic magnetic fields. Journal of Plasma Physics 83, (2017).](https://doi.org/10.1017/S0022377817000939)
 
 ## Proton radiography
 
