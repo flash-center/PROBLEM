@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 import os
 import problem.screen
+import problem.adaptive_fixed_point
 
 def get_input():
     parser = argparse.ArgumentParser(
@@ -43,6 +44,17 @@ def get_input():
                         help="Directory to save checkpoint files. " \
                              "Default: solve/")
 
+    parser.add_argument("--method", default="PMA",
+                        action="store", type=str,
+                        help="Method to use. " \
+                             "Choose from PMA (parabolic Monge-Ampere) or AFP (adaptive fixed-point). " \
+                             "Default: PMA")
+
+    parser.add_argument("-p", "--plot",
+                        action="store_true",
+                        help="Use matplotlib to plot the results at each checkpoint? " \
+                             "Default: False/")
+
     args = parser.parse_args()
 
     return(args)
@@ -54,6 +66,8 @@ def setup_input():
     nstep = args.nstep
     chk_interval = args.chk
     save_dir = args.save_dir
+    method = args.method
+    plot = args.plot
     if args.xstep is None:
         dx = float(input("Please specify the x-coordinate step size (in cm): "))
     else:
@@ -64,7 +78,7 @@ def setup_input():
         dy = args.ystep
     prad = pradreader.reader.loadPRR(ifile=args.input_file)
     prad.show()
-    return(prad, tol, step, nstep, dx, dy, chk_interval, save_dir)
+    return prad, tol, step, nstep, dx, dy, chk_interval, save_dir, method, plot
 
 def calc_coord(dx, dy, shape):
     lenx = shape[0]
@@ -83,18 +97,29 @@ def ensure_save_dir(save_dir):
         os.makedirs(dirpath)
 
 def reconstruct():
-    prad, tol, step, nstep, dx, dy,chk_interval, save_dir = setup_input()
+    prad, tol, step, nstep, dx, dy, chk_interval, save_dir, method, plot = setup_input()
     flux = prad.flux2D
     flux0 = prad.flux2D_ref
     x, y = calc_coord(dx, dy, flux.shape)
     ensure_save_dir(save_dir)
     print(x,y)
-    phin, phix, phiy = problem.screen.solve(x, y, flux0, flux,
-                                            step, tol, Nstep=nstep,
-                                            chk=True,
-                                            interval=chk_interval,
-                                            nan_exception=True,
-                                            save_dir=save_dir)
+    chk = True
+    if method == "PMA":
+        phin, phix, phiy = problem.screen.solve(x, y, flux0, flux,
+                                                step, tol, Nstep=nstep,
+                                                chk=bool(chk_interval),
+                                                interval=chk_interval,
+                                                nan_exception=True,
+                                                save_dir=save_dir,
+                                                plot=plot)
+    elif method == "AFP":
+        AFP = problem.adaptive_fixed_point.AFP(x[:,0], y[0,:])
+        phin, phix, phiy, J = AFP.AFP(flux, flux0, nstep,
+                save_interval=chk_interval,
+                save_dir=save_dir, plot=plot)
+    else:
+        raise NotImplementedError(f'Method {method} not known')
+
 
 if __name__=="__main__":
     reconstruct()
