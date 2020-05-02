@@ -8,6 +8,8 @@ import scipy as sp
 import scipy.interpolate
 import os.path
 
+import problem.plotting as pplot
+
 def setup(ri, li, rs, dxS, image, mask):
     """
     Takes proton radiography distance parameters, a proton flux image, and a
@@ -95,8 +97,9 @@ def solve(X, Y, flux0, flux, dt, tol,
           chk=False, interval=1000,
           nan_exception=True, start_chk=False,
           start_phin=None, start_step=None,
-          save_dir=None,
-          Nstep=50000):
+          save_dir='.',
+          Nstep=50000,
+          plot=None):
     """
     Main solving algorithm of the
     Monge-Ampere deflection-field potential problem using
@@ -138,6 +141,9 @@ def solve(X, Y, flux0, flux, dt, tol,
     flux0 = np.copy(flux0)
     flux = np.copy(flux)
     flux_mean = np.mean(flux)
+
+    if plot:
+        plotter = pplot.PlotPROBLEM(plasma_x, plasma_y, flux)
 
     if start_chk:
         start_phin = os.path.abspath(start_phin)
@@ -325,24 +331,18 @@ def solve(X, Y, flux0, flux, dt, tol,
         if np.linalg.norm(Fn) < tol:
             break
 
+
         if chk:
             if (timestep % interval) == 0:
-                if save_dir==None:
-                    # Save the files to the current directory.
-                    np.savetxt('phin' + str(timestep) + '.txt',
-                               phin, delimiter=',')
-                    np.savetxt('phix' + str(timestep) + '.txt',
-                               phix, delimiter=',')
-                    np.savetxt('phiy' + str(timestep) + '.txt',
-                               phiy, delimiter=',')
-                else:
-                    # Save the files to the specified save directory.
-                    np.savetxt(save_dir+'/phin' + str(timestep) + '.txt',
-                               phin, delimiter=',')
-                    np.savetxt(save_dir+'/phix' + str(timestep) + '.txt',
-                               phix, delimiter=',')
-                    np.savetxt(save_dir+'/phiy' + str(timestep) + '.txt',
-                               phiy, delimiter=',')
+                # Save the files to the specified save directory.
+                np.savetxt(f'{save_dir}/phin{timestep}.txt',
+                           phin, delimiter=',')
+                np.savetxt(f'{save_dir}/phix{timestep}.txt',
+                           phix, delimiter=',')
+                np.savetxt(f'{save_dir}/phiy{timestep}.txt',
+                           phiy, delimiter=',')
+            if plot:
+                plotter.update(phix, phiy, f'Time {timestep * dt}')
 
         #################################
         # End finite difference scheme. #
